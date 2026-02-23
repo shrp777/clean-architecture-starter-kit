@@ -1,1 +1,1 @@
-export type DriverType = "repl" | "rest";
+export type DriverType = "console" | "http";

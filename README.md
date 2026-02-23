@@ -1,6 +1,6 @@
-# Library (version starter kit)
+# Clean Architecture Starter Kit
 
-Implémentation de la **Clean Architecture** pour une application de gestion de bibliothèque, développée avec **Bun** et **TypeScript**.
+Projet modèle d'implémentation de la **Clean Architecture** avec TypeScript.
 
 ---
 
@@ -49,7 +49,7 @@ src/
 │
 └── drivers/                  # Points d'entrée
     ├── http/                 # Serveur HTTP (Bun.serve)
-    └── repl/                 # Interface CLI interactive
+    └── console/                 # Interface CLI interactive
 ```
 
 **Règle clé** : `domain/` et `application/` n'importent jamais depuis `adapters/` ou `drivers/`.
@@ -295,7 +295,7 @@ Retourne la liste de tous les endpoints disponibles.
 
 | Variable           | Description                                       |
 |--------------------|---------------------------------------------------|
-| `DRIVER_TYPE`      | `rest` (HTTP) ou `repl` (CLI interactive)         |
+| `DRIVER_TYPE`      | `http` (HTTP) ou `console` (CLI interactive)         |
 | `PERSISTENCE_TYPE` | `inmemory`, `mariadb` ou `mongodb`                |
 | `DB_HOST`          | Hôte de la base de données                        |
 | `DB_PORT`          | Port de la base de données                        |
@@ -340,12 +340,12 @@ Retourne la liste de tous les endpoints disponibles.
 
 | `DRIVER_TYPE` | `PERSISTENCE_TYPE` | Description                           |
 |---------------|--------------------|---------------------------------------|
-| `rest`        | `inmemory`         | Serveur HTTP, données en mémoire      |
-| `rest`        | `mariadb`          | Serveur HTTP, données dans MariaDB    |
-| `rest`        | `mongodb`          | Serveur HTTP, données dans MongoDB    |
-| `repl`        | `inmemory`         | CLI interactive, données en mémoire   |
-| `repl`        | `mariadb`          | CLI interactive, données dans MariaDB |
-| `repl`        | `mongodb`          | CLI interactive, données dans MongoDB |
+| `http`        | `inmemory`         | Serveur HTTP, données en mémoire      |
+| `http`        | `mariadb`          | Serveur HTTP, données dans MariaDB    |
+| `http`        | `mongodb`          | Serveur HTTP, données dans MongoDB    |
+| `console`        | `inmemory`         | CLI interactive, données en mémoire   |
+| `console`        | `mariadb`          | CLI interactive, données dans MariaDB |
+| `console`        | `mongodb`          | CLI interactive, données dans MongoDB |
 
 ---
 

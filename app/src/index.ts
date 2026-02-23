@@ -4,7 +4,7 @@ import { MariadbBookRepository } from "@adapters/repositories/mariadb/MariadbBoo
 import { MongoBookRepository } from "@adapters/repositories/mongodb/MongoBookRepository";
 import { BookPresenter } from "@adapters/presenters/BookPresenter";
 import { AddBookUseCase } from "@application/use-cases/AddBookUseCase";
-import { ReplDriver } from "@drivers/repl/ReplDriver";
+import { ReplDriver } from "@drivers/console/ReplDriver";
 import { createServer } from "@drivers/http/server";
 import type { PersistenceType } from "@drivers/PersistenceType";
 import type { DriverType } from "@drivers/DriverType";
@@ -13,7 +13,8 @@ import { createMongoDb } from "@adapters/repositories/mongodb/createMongoDb";
 
 let bookRepository: BookRepository;
 
-const persistenceType: PersistenceType = process.env.PERSISTENCE_TYPE as PersistenceType;
+const persistenceType: PersistenceType = process.env
+  .PERSISTENCE_TYPE as PersistenceType;
 const driverType: DriverType = process.env.DRIVER_TYPE as DriverType;
 
 switch (persistenceType) {
@@ -31,7 +32,7 @@ switch (persistenceType) {
     bookRepository = new InMemoryBookRepository();
 }
 
-if (driverType === "repl") {
+if (driverType === "console") {
   const repl = new ReplDriver(
     new AddBookUseCase(bookRepository),
     new BookPresenter()
