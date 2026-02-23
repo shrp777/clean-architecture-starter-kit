@@ -1,0 +1,120 @@
+@startuml Domaine — Bibliothèque
+
+top to bottom direction
+
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam ranksep 60
+skinparam nodesep 40
+skinparam ArrowColor #555555
+skinparam classBackgroundColor White
+skinparam classBorderColor #AAAAAA
+skinparam abstractClassBackgroundColor #FFF0F0
+skinparam abstractClassBorderColor #CC8888
+skinparam packageBorderColor #AAAAAA
+skinparam NoteBorderColor #CCCCCC
+skinparam NoteBackgroundColor #FFFDE7
+
+' ════════════════════════════════════════════════════════════════
+' ENTITÉS
+' ════════════════════════════════════════════════════════════════
+package "entities" #FFFBEA {
+
+  class Member {
+    + id : string
+    + name : string
+    + email : string
+    --
+    + Member(id, name, email)
+  }
+
+  class Book {
+    + id : string
+    + title : string
+    + author : string
+    + isbn : Isbn?
+    --
+    + Book(id, title, author, isbn?)
+  }
+
+  class Loan {
+    + id : string
+    + bookId : string
+    + memberId : string
+    + borrowedAt : Date
+    + returnedAt : Date?
+    --
+    + isActive : boolean <<get>>
+    + giveBack() : Loan
+  }
+
+}
+
+' ════════════════════════════════════════════════════════════════
+' VALUE OBJECT
+' ════════════════════════════════════════════════════════════════
+package "value-objects" #EEF6FF {
+
+  class Isbn <<value object>> {
+    + value : string
+    --
+    + Isbn(raw: string)
+    + toString() : string
+    - {static} isValidIsbn10(isbn) : boolean
+    - {static} isValidIsbn13(isbn) : boolean
+  }
+
+}
+
+' ════════════════════════════════════════════════════════════════
+' ERREURS
+' ════════════════════════════════════════════════════════════════
+package "errors" #FFF0F0 {
+
+  abstract class DomainError {
+    + name : string
+    --
+    + DomainError(message)
+  }
+
+  class InvalidNameError
+  class InvalidEmailError
+  class InvalidTitleError
+  class InvalidAuthorError
+  class InvalidIsbnError
+  class LoanAlreadyReturnedError
+
+}
+
+' ════════════════════════════════════════════════════════════════
+' HÉRITAGE DES ERREURS
+' ════════════════════════════════════════════════════════════════
+InvalidNameError         --|> DomainError
+InvalidEmailError        --|> DomainError
+InvalidTitleError        --|> DomainError
+InvalidAuthorError       --|> DomainError
+InvalidIsbnError         --|> DomainError
+LoanAlreadyReturnedError --|> DomainError
+
+' ════════════════════════════════════════════════════════════════
+' COMPOSITION — Book possède un Isbn
+' ════════════════════════════════════════════════════════════════
+Book *-right- "0..1" Isbn : isbn
+
+' ════════════════════════════════════════════════════════════════
+' ASSOCIATIONS — Loan référence Member et Book par ID
+' ════════════════════════════════════════════════════════════════
+Loan "0..*" -left-> "1" Member : memberId
+Loan "0..*" -right-> "1" Book  : bookId
+
+' ════════════════════════════════════════════════════════════════
+' THROWS — erreurs levées par chaque classe
+' ════════════════════════════════════════════════════════════════
+Member ..> InvalidNameError  : throws
+Member ..> InvalidEmailError : throws
+Book   ..> InvalidTitleError  : throws
+Book   ..> InvalidAuthorError : throws
+Isbn   ..> InvalidIsbnError   : throws
+Loan   ..> LoanAlreadyReturnedError : throws
+
+@enduml

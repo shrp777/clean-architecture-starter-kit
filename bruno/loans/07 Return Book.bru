@@ -1,0 +1,17 @@
+meta {
+  name: Return Book
+  type: http
+  seq: 7
+}
+
+patch {
+  url: {{baseUrl}}/api/loans/{{loanId}}/return
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+  res.body.id: isDefined
+  res.body.returnedAt: isDefined
+}

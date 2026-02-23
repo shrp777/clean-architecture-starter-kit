@@ -1,0 +1,15 @@
+meta {
+  name: Get Member - Not Found
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/members/non-existent-id
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}

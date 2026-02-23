@@ -1,0 +1,25 @@
+meta {
+  name: Add Book - Missing Title
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/books
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "author": "Robert C. Martin"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

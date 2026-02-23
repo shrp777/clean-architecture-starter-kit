@@ -1,0 +1,26 @@
+meta {
+  name: Borrow Book - Already Borrowed
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/loans
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "bookId": "{{bookId}}",
+    "memberId": "{{memberId}}"
+  }
+}
+
+assert {
+  res.status: eq 409
+}

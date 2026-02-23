@@ -1,0 +1,22 @@
+meta {
+  name: 06 - Get Member Loans
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/loans?memberId={{memberId}}
+  body: none
+  auth: none
+}
+
+params:query {
+  memberId: {{memberId}}
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+  res.body[0].id: isDefined
+  res.body[0].returnedAt: isUndefined
+}

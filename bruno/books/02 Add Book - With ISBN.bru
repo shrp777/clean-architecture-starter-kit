@@ -1,0 +1,31 @@
+meta {
+  name: Add Book - With ISBN
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/books
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "title": "The Pragmatic Programmer",
+    "author": "David Thomas",
+    "isbn": "978-0-321-12521-7"
+  }
+}
+
+assert {
+  res.status: eq 201
+  res.body.id: isDefined
+  res.body.title: eq The Pragmatic Programmer
+  res.body.author: eq David Thomas
+  res.body.isbn: isDefined
+}

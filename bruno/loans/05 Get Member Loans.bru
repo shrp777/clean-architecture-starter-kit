@@ -1,0 +1,20 @@
+meta {
+  name: Get Member Loans
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/api/loans
+  body: none
+  auth: none
+}
+
+params:query {
+  memberId: {{memberId}}
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+}

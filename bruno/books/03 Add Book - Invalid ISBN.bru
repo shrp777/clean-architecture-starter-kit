@@ -1,0 +1,27 @@
+meta {
+  name: Add Book - Invalid ISBN
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/books
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "title": "Some Book",
+    "author": "Some Author",
+    "isbn": "invalid-isbn-123"
+  }
+}
+
+assert {
+  res.status: eq 422
+}

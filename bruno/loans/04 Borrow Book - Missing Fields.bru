@@ -1,0 +1,25 @@
+meta {
+  name: Borrow Book - Missing Fields
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/loans
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "bookId": "{{bookId}}"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

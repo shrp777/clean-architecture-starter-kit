@@ -1,0 +1,15 @@
+meta {
+  name: Get Member Loans - Missing memberId
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/loans
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 400
+}

@@ -1,0 +1,26 @@
+meta {
+  name: Create Member - Invalid Email
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/members
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Bob Dupont",
+    "email": "not-an-email"
+  }
+}
+
+assert {
+  res.status: eq 422
+}

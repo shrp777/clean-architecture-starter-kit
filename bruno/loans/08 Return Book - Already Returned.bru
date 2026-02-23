@@ -1,0 +1,15 @@
+meta {
+  name: Return Book - Already Returned
+  type: http
+  seq: 8
+}
+
+patch {
+  url: {{baseUrl}}/api/loans/{{loanId}}/return
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 422
+}

@@ -1,0 +1,86 @@
+name: "library"
+
+services:
+  app:
+    container_name: app
+    ports:
+      - "3000:3000"
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    env_file:
+      - ./app/.env
+    networks:
+      - library.net
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./app/src
+          target: /app/src
+        - action: rebuild
+          path: ./app/package.json
+
+  mariadb:
+    container_name: mariadb
+    image: mariadb
+    env_file:
+      - ./mariadb/.env
+    volumes:
+      - ./mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - library.net
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    ports:
+      - "8181:8080"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - library.net
+
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    env_file:
+      - ./mongodb/.env
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - ./mongodb/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+    networks:
+      - library.net
+
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express
+    ports:
+      - "8282:8081"
+    env_file:
+      - ./mongo-express/.env
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - library.net
+
+networks:
+  library.net:
+    driver: bridge

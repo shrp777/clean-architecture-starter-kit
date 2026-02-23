@@ -1,0 +1,16 @@
+meta {
+  name: 08 - Check Availability (should be available again)
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{baseUrl}}/api/books/{{bookId}}/availability
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+  res.body.available: eq true
+}

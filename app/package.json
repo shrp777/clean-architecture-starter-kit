@@ -1,0 +1,21 @@
+{
+  "name": "clean-architecture",
+  "module": "src/index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "bun src/index.ts",
+    "dev": "bun --watch src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "inquirer": "^13.2.5",
+    "mongodb": "^7.1.0",
+    "mysql2": "^3.17.4"
+  }
+}

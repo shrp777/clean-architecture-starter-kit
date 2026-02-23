@@ -1,0 +1,15 @@
+meta {
+  name: Check Availability - Not Found
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/books/non-existent-id/availability
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}

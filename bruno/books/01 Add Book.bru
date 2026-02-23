@@ -1,0 +1,29 @@
+meta {
+  name: Add Book
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/books
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "title": "Clean Architecture",
+    "author": "Robert C. Martin"
+  }
+}
+
+assert {
+  res.status: eq 201
+  res.body.id: isDefined
+  res.body.title: eq Clean Architecture
+  res.body.author: eq Robert C. Martin
+}
