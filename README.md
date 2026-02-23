@@ -9,7 +9,7 @@ Projet modèle d'implémentation de la **Clean Architecture** avec TypeScript.
 - [Architecture](#architecture)
 - [Modèle du domaine](#modèle-du-domaine)
 - [Cas d'utilisation](#cas-dutilisation)
-- [API HTTP](#api-http)
+- [API REST](#api-rest)
 - [Configuration](#configuration)
 - [Démarrage](#démarrage)
 - [Gestion des erreurs](#gestion-des-erreurs)
@@ -71,33 +71,6 @@ Représente un livre dans la bibliothèque.
 | `author`  | `string` | Non vide (espaces ignorés)       |
 | `isbn`    | `Isbn?`  | Optionnel — ISBN-10 ou ISBN-13   |
 
-#### `Member`
-
-Représente un adhérent de la bibliothèque.
-
-| Propriété | Type     | Contraintes                        |
-|-----------|----------|------------------------------------|
-| `id`      | `string` | UUID généré automatiquement        |
-| `name`    | `string` | Non vide                           |
-| `email`   | `string` | Doit contenir `@`, normalisé en minuscules |
-
-#### `Loan`
-
-Représente un emprunt d'un livre par un adhérent.
-
-| Propriété    | Type     | Contraintes                                      |
-|--------------|----------|--------------------------------------------------|
-| `id`         | `string` | UUID généré automatiquement                      |
-| `bookId`     | `string` | Référence à un `Book`                            |
-| `memberId`   | `string` | Référence à un `Member`                          |
-| `borrowedAt` | `Date`   | Date de l'emprunt                                |
-| `returnedAt` | `Date?`  | `undefined` si l'emprunt est toujours actif      |
-
-**Méthodes :**
-
-- `isActive` — `true` si le livre n'a pas encore été rendu
-- `giveBack()` — retourne un nouvel objet `Loan` avec `returnedAt` défini ; lève `LoanAlreadyReturnedError` si déjà rendu
-
 ### Objet valeur : `Isbn`
 
 Valide et normalise un ISBN-10 ou ISBN-13 (les tirets et espaces sont retirés, la somme de contrôle est vérifiée).
@@ -108,17 +81,11 @@ Valide et normalise un ISBN-10 ou ISBN-13 (les tirets et espaces sont retirés, 
 
 | Use case                    | Entrée                              | Sortie              | Erreurs possibles                              |
 |-----------------------------|-------------------------------------|---------------------|------------------------------------------------|
-| `AddBookUseCase`            | `{ title, author, isbn? }`          | `BookResponseDTO`   | `InvalidTitleError`, `InvalidAuthorError`, `InvalidIsbnError` |
-| `CheckBookAvailabilityUseCase` | `bookId`                         | `{ available }`     | `BookNotFoundError`                            |
-| `CreateMemberUseCase`       | `{ name, email }`                   | `MemberResponseDTO` | `InvalidNameError`, `InvalidEmailError`        |
-| `GetMemberUseCase`          | `memberId`                          | `MemberResponseDTO` | `MemberNotFoundError`                          |
-| `BorrowBookUseCase`         | `{ bookId, memberId }`              | `LoanResponseDTO`   | `BookNotFoundError`, `BookAlreadyBorrowedError` |
-| `ReturnBookUseCase`         | `loanId`                            | `LoanResponseDTO`   | `LoanNotFoundError`, `LoanAlreadyReturnedError` |
-| `GetMemberLoansUseCase`     | `memberId`                          | `LoanResponseDTO[]` | —                                              |
+| `AddBookUseCase`            | `{ title, author, isbn? }`          | `BookResponseDTO`   | `InvalidTitleError`, `InvalidAuthorError`, `InvalidIsbnError` |                                              |
 
 ---
 
-## API HTTP
+## API REST
 
 Le serveur écoute sur le port **3000**.
 
@@ -126,52 +93,7 @@ Le serveur écoute sur le port **3000**.
 
 Retourne la liste de tous les endpoints disponibles.
 
----
-
-### Membres
-
-#### `POST /api/members` — Créer un adhérent
-
-**Corps de la requête :**
-
-```json
-{
-  "name": "Alice Dupont",
-  "email": "alice@example.com"
-}
-```
-
-**Réponse `201` :**
-
-```json
-{
-  "id": "550e8400-e29b-41d4-a716-446655440000",
-  "name": "Alice Dupont",
-  "email": "alice@example.com"
-}
-```
-
----
-
-#### `GET /api/members/:id` — Récupérer un adhérent
-
-**Réponse `200` :**
-
-```json
-{
-  "id": "550e8400-e29b-41d4-a716-446655440000",
-  "name": "Alice Dupont",
-  "email": "alice@example.com"
-}
-```
-
-**Réponse `404` :** adhérent introuvable.
-
----
-
-### Livres
-
-#### `POST /api/books` — Ajouter un livre
+### `POST /api/books` — Ajouter un livre
 
 **Corps de la requête :**
 
@@ -197,85 +119,6 @@ Retourne la liste de tous les endpoints disponibles.
 ```
 
 **Réponse `422` :** titre ou auteur invalide, ISBN invalide.
-
----
-
-#### `GET /api/books/:id/availability` — Vérifier la disponibilité
-
-**Réponse `200` :**
-
-```json
-{ "available": true }
-```
-
-**Réponse `404` :** livre introuvable.
-
----
-
-### Emprunts
-
-#### `POST /api/loans` — Emprunter un livre
-
-**Corps de la requête :**
-
-```json
-{
-  "bookId": "a1b2c3d4-...",
-  "memberId": "550e8400-..."
-}
-```
-
-**Réponse `201` :**
-
-```json
-{
-  "id": "f47ac10b-...",
-  "bookId": "a1b2c3d4-...",
-  "memberId": "550e8400-...",
-  "borrowedAt": "2026-02-23T10:00:00.000Z",
-  "returnedAt": null
-}
-```
-
-**Réponse `404` :** livre introuvable.
-**Réponse `409` :** livre déjà emprunté.
-
----
-
-#### `GET /api/loans?memberId=:id` — Emprunts d'un adhérent
-
-**Réponse `200` :**
-
-```json
-[
-  {
-    "id": "f47ac10b-...",
-    "bookId": "a1b2c3d4-...",
-    "memberId": "550e8400-...",
-    "borrowedAt": "2026-02-23T10:00:00.000Z",
-    "returnedAt": null
-  }
-]
-```
-
----
-
-#### `PATCH /api/loans/:id/return` — Rendre un livre
-
-**Réponse `200` :**
-
-```json
-{
-  "id": "f47ac10b-...",
-  "bookId": "a1b2c3d4-...",
-  "memberId": "550e8400-...",
-  "borrowedAt": "2026-02-23T10:00:00.000Z",
-  "returnedAt": "2026-02-24T15:30:00.000Z"
-}
-```
-
-**Réponse `404` :** emprunt introuvable.
-**Réponse `422` :** livre déjà rendu.
 
 ---
 
@@ -404,8 +247,6 @@ Levées lors de la création d'entités avec des données invalides.
 | `InvalidAuthorError`    | Author cannot be empty               | `422` |
 | `InvalidIsbnError`      | Invalid ISBN: "..."                  | `422` |
 | `InvalidNameError`      | Name cannot be empty                 | `422` |
-| `InvalidEmailError`     | Invalid email address: "..."         | `422` |
-| `LoanAlreadyReturnedError` | Loan has already been returned    | `422` |
 
 ### Erreurs applicatives (`ApplicationError`)
 
@@ -414,13 +255,10 @@ Levées lors de l'exécution des cas d'utilisation.
 | Erreur                   | Message                        | HTTP  |
 |--------------------------|--------------------------------|-------|
 | `BookNotFoundError`      | Book "..." not found           | `404` |
-| `MemberNotFoundError`    | Member "..." not found         | `404` |
-| `LoanNotFoundError`      | Loan "..." not found           | `404` |
-| `BookAlreadyBorrowedError` | Book "..." is already borrowed | `409` |
 
 ---
 
-## Aliasages TypeScript
+## Raccourcis pour les imports
 
 Configurés dans `app/tsconfig.json` — à utiliser à la place des chemins relatifs :
 
