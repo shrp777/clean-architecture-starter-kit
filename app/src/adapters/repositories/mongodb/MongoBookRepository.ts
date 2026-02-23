@@ -1,13 +1,7 @@
 import type { Db } from "mongodb";
 import type { BookRepository } from "@application/ports/outputs/BookRepository";
 import { Book } from "@domain/entities/Book";
-
-interface BookDocument {
-  _id: string;
-  title: string;
-  author: string;
-  isbn?: string;
-}
+import type { BookDocument } from "@adapters/repositories/mongodb/BookDocument";
 
 export class MongoBookRepository implements BookRepository {
   private readonly collection;
@@ -21,7 +15,7 @@ export class MongoBookRepository implements BookRepository {
       _id: book.id,
       title: book.title,
       author: book.author,
-      ...(book.isbn !== undefined && { isbn: book.isbn.value }),
+      ...(book.isbn !== undefined && { isbn: book.isbn.value })
     };
     await this.collection.insertOne(doc);
   }

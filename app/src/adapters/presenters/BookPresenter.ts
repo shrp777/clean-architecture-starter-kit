@@ -1,11 +1,5 @@
 import type { BookResponseDTO } from "@application/dtos/book/BookResponseDTO";
-
-export interface BookView {
-  id: string;
-  title: string;
-  author: string;
-  isbn?: string;
-}
+import type { BookView } from "@adapters/presenters/BookView";
 
 export class BookPresenter {
   present(dto: BookResponseDTO): BookView {
