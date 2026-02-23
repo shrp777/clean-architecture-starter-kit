@@ -1,6 +1,6 @@
-# Library — Clean Architecture
+# Library (version starter kit)
 
-Implémentation de la **Clean Architecture** (Ports & Adapters / Architecture Hexagonale) pour une application de gestion de bibliothèque, développée avec **Bun** et **TypeScript**.
+Implémentation de la **Clean Architecture** pour une application de gestion de bibliothèque, développée avec **Bun** et **TypeScript**.
 
 ---
 
