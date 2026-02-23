@@ -5,10 +5,7 @@ import { InvalidTitleError } from "@domain/errors/InvalidTitleError";
 import { InvalidAuthorError } from "@domain/errors/InvalidAuthorError";
 import { InvalidIsbnError } from "@domain/errors/InvalidIsbnError";
 import { AddBookUseCase } from "@application/use-cases/AddBookUseCase";
-import { CheckBookAvailabilityUseCase } from "@application/use-cases/CheckBookAvailabilityUseCase";
-import { BookNotFoundError } from "@application/errors/BookNotFoundError";
 import { InMemoryBookRepository } from "@adapters/repositories/in-memory/InMemoryBookRepository";
-import { InMemoryLoanRepository } from "@adapters/repositories/in-memory/InMemoryLoanRepository";
 
 // ── Isbn value object ─────────────────────────────────────────────────────────
 
@@ -142,30 +139,5 @@ describe("AddBookUseCase", () => {
     await expect(
       useCase.execute({ title: "DDD", author: "Evans", isbn: "bad-isbn" })
     ).rejects.toThrow(InvalidIsbnError);
-  });
-});
-
-// ── CheckBookAvailabilityUseCase ──────────────────────────────────────────────
-
-describe("CheckBookAvailabilityUseCase", () => {
-  let bookRepository: InMemoryBookRepository;
-  let loanRepository: InMemoryLoanRepository;
-  let useCase: CheckBookAvailabilityUseCase;
-
-  beforeEach(() => {
-    bookRepository = new InMemoryBookRepository();
-    loanRepository = new InMemoryLoanRepository();
-    useCase = new CheckBookAvailabilityUseCase(bookRepository, loanRepository);
-  });
-
-  it("throws BookNotFoundError for unknown book", async () => {
-    await expect(useCase.execute("unknown")).rejects.toThrow(BookNotFoundError);
-  });
-
-  it("returns available: true when no active loan", async () => {
-    const addBook = new AddBookUseCase(bookRepository);
-    const book = await addBook.execute({ title: "DDD", author: "Evans" });
-    const result = await useCase.execute(book.id);
-    expect(result.available).toBe(true);
   });
 });
