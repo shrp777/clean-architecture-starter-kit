@@ -26,7 +26,7 @@ Drivers → Adapters → Application → Domain
 
 ```
 src/
-├── domain/                   # Logique métier pure — aucune dépendance extérieure
+├── domain/                   # Logique métier pure - aucune dépendance extérieure
 │   ├── entities/             # Entités : Book, Loan, Member
 │   ├── value-objects/        # Objets valeur : Isbn
 │   └── errors/               # Erreurs métier
@@ -49,7 +49,7 @@ src/
 │
 └── drivers/                  # Points d'entrée
     ├── http/                 # Serveur HTTP (Bun.serve)
-    └── console/                 # Interface CLI interactive
+    └── console/              # Interface CLI interactive
 ```
 
 **Règle clé** : `domain/` et `application/` n'importent jamais depuis `adapters/` ou `drivers/`.
@@ -69,7 +69,7 @@ Représente un livre dans la bibliothèque.
 | `id`      | `string` | UUID généré automatiquement      |
 | `title`   | `string` | Non vide (espaces ignorés)       |
 | `author`  | `string` | Non vide (espaces ignorés)       |
-| `isbn`    | `Isbn?`  | Optionnel — ISBN-10 ou ISBN-13   |
+| `isbn`    | `Isbn?`  | Optionnel - ISBN-10 ou ISBN-13   |
 
 ### Objet valeur : `Isbn`
 
@@ -93,7 +93,7 @@ Le serveur écoute sur le port **3000**.
 
 Retourne la liste de tous les endpoints disponibles.
 
-### `POST /api/books` — Ajouter un livre
+### `POST /api/books` - Ajouter un livre
 
 **Corps de la requête :**
 
@@ -122,7 +122,7 @@ Retourne la liste de tous les endpoints disponibles.
 
 ---
 
-#### `GET /api/health` — Santé du serveur
+#### `GET /api/health` - Santé du serveur
 
 ```json
 { "status": "ok", "timestamp": "2026-02-23T10:00:00.000Z" }
@@ -260,7 +260,7 @@ Levées lors de l'exécution des cas d'utilisation.
 
 ## Raccourcis pour les imports
 
-Configurés dans `app/tsconfig.json` — à utiliser à la place des chemins relatifs :
+Configurés dans `app/tsconfig.json` - à utiliser à la place des chemins relatifs :
 
 | Alias          | Chemin réel       |
 |----------------|-------------------|
@@ -279,4 +279,4 @@ Configurés dans `app/tsconfig.json` — à utiliser à la place des chemins rel
 **Alexandre Leroux**
 _Enseignant / Formateur_
 _Développeur logiciel web & mobile_
-Nancy (Grand Est, France) — <https://shrp.dev>
+Nancy (Grand Est, France) - <https://shrp.dev>
