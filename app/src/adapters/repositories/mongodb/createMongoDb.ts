@@ -12,8 +12,5 @@ export async function createMongoDb(): Promise<Db> {
   const client = new MongoClient(url);
   await client.connect();
 
-  const db = client.db(dbName);
-  await db.collection("members").createIndex({ email: 1 }, { unique: true });
-
-  return db;
+  return client.db(dbName);
 }

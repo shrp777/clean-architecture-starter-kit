@@ -133,6 +133,7 @@ Retourne la liste de tous les endpoints disponibles.
 #### `POST /api/members` — Créer un adhérent
 
 **Corps de la requête :**
+
 ```json
 {
   "name": "Alice Dupont",
@@ -141,6 +142,7 @@ Retourne la liste de tous les endpoints disponibles.
 ```
 
 **Réponse `201` :**
+
 ```json
 {
   "id": "550e8400-e29b-41d4-a716-446655440000",
@@ -154,6 +156,7 @@ Retourne la liste de tous les endpoints disponibles.
 #### `GET /api/members/:id` — Récupérer un adhérent
 
 **Réponse `200` :**
+
 ```json
 {
   "id": "550e8400-e29b-41d4-a716-446655440000",
@@ -171,6 +174,7 @@ Retourne la liste de tous les endpoints disponibles.
 #### `POST /api/books` — Ajouter un livre
 
 **Corps de la requête :**
+
 ```json
 {
   "title": "Clean Architecture",
@@ -182,6 +186,7 @@ Retourne la liste de tous les endpoints disponibles.
 > `isbn` est optionnel.
 
 **Réponse `201` :**
+
 ```json
 {
   "id": "a1b2c3d4-...",
@@ -198,6 +203,7 @@ Retourne la liste de tous les endpoints disponibles.
 #### `GET /api/books/:id/availability` — Vérifier la disponibilité
 
 **Réponse `200` :**
+
 ```json
 { "available": true }
 ```
@@ -211,6 +217,7 @@ Retourne la liste de tous les endpoints disponibles.
 #### `POST /api/loans` — Emprunter un livre
 
 **Corps de la requête :**
+
 ```json
 {
   "bookId": "a1b2c3d4-...",
@@ -219,6 +226,7 @@ Retourne la liste de tous les endpoints disponibles.
 ```
 
 **Réponse `201` :**
+
 ```json
 {
   "id": "f47ac10b-...",
@@ -237,6 +245,7 @@ Retourne la liste de tous les endpoints disponibles.
 #### `GET /api/loans?memberId=:id` — Emprunts d'un adhérent
 
 **Réponse `200` :**
+
 ```json
 [
   {
@@ -254,6 +263,7 @@ Retourne la liste de tous les endpoints disponibles.
 #### `PATCH /api/loans/:id/return` — Rendre un livre
 
 **Réponse `200` :**
+
 ```json
 {
   "id": "f47ac10b-...",
@@ -351,9 +361,9 @@ Tous les services démarrent ensemble : app, MariaDB, Adminer, MongoDB et Mongo 
 
 | Interface     | URL                    |
 |---------------|------------------------|
-| API           | http://localhost:3000  |
-| Adminer       | http://localhost:8181  |
-| Mongo Express | http://localhost:8282  |
+| API           | <http://localhost:3000>  |
+| Adminer       | <http://localhost:8181>  |
+| Mongo Express | <http://localhost:8282>  |
 
 > Lors du premier démarrage avec MongoDB, supprimer les volumes existants pour forcer l'exécution du script d'init : `docker compose down -v`.
 
@@ -421,6 +431,8 @@ Configurés dans `app/tsconfig.json` — à utiliser à la place des chemins rel
 | `@adapters/*`  | `src/adapters/*`  |
 | `@drivers/*`   | `src/drivers/*`   |
 | `@test/*`      | `tests/*`         |
+
+![alt text](assets/bibliotheque.png)
 
 ---
 
